@@ -26,7 +26,7 @@ wsl --set-default-version 2
 
 ### 2. Instalação e configuração
 
-Instale pela Microsoft Store e rode estes caminhos conforme documentação do docker:https://docs.docker.com/engine/install/ubuntu/
+Instale o Ubuntu pela Microsoft Store e rode estes caminhos conforme documentação do docker:https://docs.docker.com/engine/install/ubuntu/
 
 ```bash
 sudo apt-get update
@@ -60,6 +60,8 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 ```
 
 Para testar o docker hello-world:
+
+## 3. Instalar o Docker for Windows
 
 ````bash
 sudo docker run hello-world
@@ -117,11 +119,10 @@ docker cp arquivo.txt principal:/nova_pasta
 docker pull mysql
 #-d para executar em background
 #-p porta padrao
-docker run -e MYSQL_ROOT_PASSWORD=senha --name nome_container -d -p 3306:3306
+docker run -e MYSQL_ROOT_PASSWORD=senha --name mysql-A -d -p 3306:3306 mysql
 #executando o banco
 docker exec -it nome_container bash
 #comando para se conectar no banco
 mysql -u root -p --protocolo=tcp
 
 ```
-
