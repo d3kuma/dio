@@ -122,7 +122,7 @@ docker pull mysql
 docker run -e MYSQL_ROOT_PASSWORD=senha --name mysql-A -d -p 3306:3306 mysql
 #executando o banco
 docker exec -it nome_container bash
-#comando para se conectar no banco
-mysql -u root -p --protocolo=tcp
+#comando para se conectar no banco pelo mysql-client
+mysql -u root -p --protocol=tcp
 
 ```
