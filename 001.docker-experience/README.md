@@ -126,3 +126,98 @@ docker exec -it nome_container bash
 mysql -u root -p --protocol=tcp
 
 ```
+
+## Mudando localização de armazenamento
+
+Usando o comando abaixo, podemos visualizar onde salvamos o nosso container:
+
+```bash
+docker inspect -a
+
+```
+
+Em Mounts > Destinations:
+
+```bash
+        "Mounts": [
+            {
+                "Type": "volume",
+                "Name": "be9c75e7c009c818341f3962e3b42c9744388f88f2cf70e34f4191396689ade2",
+                "Source": "/var/lib/docker/volumes/be9c75e7c009c818341f3962e3b42c9744388f88f2cf70e34f4191396689ade2/_data",
+                "Destination": "/var/lib/mysql",
+                "Driver": "local",
+                "Mode": "",
+                "RW": true,
+                "Propagation": ""
+            }
+        ],
+
+```
+
+## Mount do tipo bind
+
+
+
+Criamos um diretório abaixo para nosso novo destino:
+
+```bash
+mkdir /data
+mkdir /data/mysql-A
+```
+
+Logamos no Mysql:
+
+```bash
+docker run -e MYSQL_ROOT_PASSWORD=Senha123 --name mysql-A -d -p 3306:3306 --volume=/data:/var/lib/mysql mysql
+
+mysql -u root -p --protocol=tcp --port=3306
+```
+
+Criamos um banco de dados exemplo:
+
+```mysql
+CREATE TABLE alunos (
+    AlunoID int,
+    Nome varchar(50),
+    Sobrenome varchar(50),
+    Endereco varchar(150),
+    Cidade varchar(50)
+);
+
+INSERT INTO alunos (AlunoID, Nome, Sobrenome, Endereco, Cidade) VALUES (1, 'Carlos Alberto', 'da Silva', 'Av. que sobe e desce que ninguém conhece', 'Manaus');
+```
+
+Mesmo se excluirmos o banco por este comando, ele estará na pasta que definimos:
+
+```bash
+docker rm mysql-A
+ ls /data/mysql-A
+ aula            binlog.000003   client-cert.pem      ib_buffer_pool  '#innodb_temp'   performance_schema   server-key.pem
+ auto.cnf        binlog.index    client-key.pem       ibdata1          mysql           private_key.pem      sys
+ binlog.000001   ca-key.pem     '#ib_16384_0.dblwr'   ibtmp1           mysql.ibd       public_key.pem       undo_001
+ binlog.000002   ca.pem         '#ib_16384_1.dblwr'  '#innodb_redo'    mysql.sock      server-cert.pem      undo_002
+```
+
+## Mount do tipo named
+
+Podemos criá-lo manualmente pelo comando:
+
+```bash
+docker volume create nome-do-volume
+```
+
+Ele serão criados no diretório padrão:
+
+```bash
+/var/lib/docker
+```
+
+No mount do tipo bind, precisamos informar o diretório criado e o diretório padrão. No tipo named, podemos referenciá-lo pelo nome:
+
+```bas
+docker run -v mysql_data:/containerdir mysql
+```
+
+## Mount to tipo volume
+
+Parece com tipo named, porém não precisa especificar o nome. Mais voltado para dados persistentes.
