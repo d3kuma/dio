@@ -126,3 +126,39 @@ docker exec -it nome_container bash
 mysql -u root -p --protocolo=tcp
 
 ```
+
+## Na prática
+
+### Sintaxe
+
+```bash
+#sintaxe
+#docker run 
+#-dti onde -d para rodar em background, -t para rodar em tty e -i para modo interativo
+#--name para nomear o container
+#--mount type para o tipo, que pode ser bind ou volume
+#src é a pasta de origem
+#dst é a pasta de destino
+#por fim a imagem que usamos de modelo, que no caso é o debian
+```
+## Tipo Bind
+
+```bash
+docker run -dti --mount type=bind,src=/data/debian-A,dst=/data debian
+docker exec -ti nome_container bash
+#criar com modo de somente leitura
+docker run -dti --mount type=bind,src=/data/debian-A,dst=/data,ro debian
+```
+
+### Tipo mount
+
+```bash
+#criando um volume
+#docker volume create nome
+docker volume create data-debian
+#acessando a pasta
+cd /var/lib/docker/volumes/data-debian/
+#exemplo do tipo volume
+docker run -dti --name debian-B --mount type=volume src=data-debian,dst=/data debian
+docker exec -ti debian-B
+```
